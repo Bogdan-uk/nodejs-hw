@@ -1,0 +1,21 @@
+{
+  "name": "nodejs-hw",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "type": "module",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bogdan-uk/nodejs-hw.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bogdan-uk/nodejs-hw/issues"
+  },
+  "homepage": "https://github.com/Bogdan-uk/nodejs-hw#readme",
+  "description": ""
+}
