@@ -14,7 +14,7 @@ const noteSchema = new mongoose.Schema(
     },
     tag: {
       type: String,
-      required: true,
+      default: 'Todo',
       enum: [
         'Work',
         'Personal',

@@ -4,7 +4,7 @@ export const getAllNotes = async (req, res, next) => {
   const allNotes = await Note.find();
   res.status(200).json(allNotes);
 };
-export const getNotesById = async (req, res, next) => {
+export const getNoteById = async (req, res, next) => {
   const { noteId } = req.params;
 
   const note = await Note.findById(noteId);
