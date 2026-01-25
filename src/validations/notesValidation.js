@@ -18,11 +18,9 @@ export const getAllNotesSchema = {
 };
 export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
-    title: Joi.string().min(1).max(25).required(),
-    content: Joi.string().min(1).max(150),
-    tag: Joi.string()
-      .valid(...TAGS)
-      .required(),
+    title: Joi.string().min(1).required(),
+    content: Joi.string().allow(''),
+    tag: Joi.string().valid(...TAGS),
   }),
 };
 
@@ -45,8 +43,8 @@ export const updateNoteSchema = {
   }),
 
   [Segments.BODY]: Joi.object({
-    title: Joi.string().min(1).max(25),
-    content: Joi.string().min(0).max(150),
+    title: Joi.string().min(1),
+    content: Joi.string().allow(''),
     tag: Joi.string().valid(...TAGS),
   }).min(1),
 };
