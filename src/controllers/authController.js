@@ -60,13 +60,13 @@ export const refreshUserSession = async (req, res) => {
   });
 
   if (!session) {
-    throw createHttpError(401, 'No session');
+    throw createHttpError(401, 'Session not found');
   }
 
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
   if (isSessionTokenExpired) {
-    throw createHttpError(401, 'Session expired');
+    throw createHttpError(401, 'Session token expired');
   }
 
   await Session.deleteOne({
@@ -78,6 +78,6 @@ export const refreshUserSession = async (req, res) => {
   setSessionCookies(res, newSession);
 
   res.status(200).json({
-    message: 'New session created',
+    message: 'Session refreshed',
   });
 };
