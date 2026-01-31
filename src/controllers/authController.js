@@ -10,7 +10,7 @@ export const registerUser = async (req, res) => {
     throw createHttpError(400, 'Email in use');
   }
   const hashedPassword = await bcrypt.hash(password, 10);
-  res.status(201).json({ msg: 'register ok' });
+
   const newUser = await User.create({
     email,
     password: hashedPassword,
@@ -34,7 +34,7 @@ export const loginUser = async (req, res) => {
   if (!isValidPassword) {
     throw createHttpError(401, 'Invalid credetials');
   }
-
+  await Session.deleteOne({ userId: user._id });
   const newSession = await createSession(user._id);
   setSessionCookies(res, newSession);
 
