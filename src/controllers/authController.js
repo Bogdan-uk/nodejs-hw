@@ -2,6 +2,8 @@ import { User } from '../models/user.js';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 import { Session } from '../models/session.js';
+import { sendEmail } from '../utils/sendMail.js';
+import jwt from 'jsonwebtoken';
 import { createSession, setSessionCookies } from '../services/auth.js';
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
@@ -80,4 +82,33 @@ export const refreshUserSession = async (req, res) => {
   res.status(200).json({
     message: 'Session refreshed',
   });
+};
+
+export const requestResetEmail = async (req, res) => {
+  const { email } = req.body;
+  const resetToken = jwt.sign(
+    { sub: user._id, email },
+    process.env.JWT_SECRET,
+    { expiresIn: '15m' },
+  );
+  const frontendUrl = `mysite.com?token=${resetToken}`;
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(200).json({ message: 'Password reset email sent successfully' });
+  }
+  try {
+    await sendEmail({
+      from: process.env.SMTP_FROM,
+      to: email,
+      subject: 'Reset password link',
+      html: `<p>Click this <a href="${frontendUrl}">link</a> to reset password</p>`,
+    });
+  } catch {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
+
+  res.status(200).json({ message: 'Email sent!' });
 };
