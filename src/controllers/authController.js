@@ -1,5 +1,8 @@
 import { User } from '../models/user.js';
 import bcrypt from 'bcrypt';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
 import createHttpError from 'http-errors';
 import { Session } from '../models/session.js';
 import { sendEmail } from '../utils/sendMail.js';
@@ -98,15 +101,21 @@ export const requestResetEmail = async (req, res) => {
     { expiresIn: '15m' },
   );
 
+ const templatePath = path.resolve('src/templates/reset-password-email.html');
+ const templateSource = await fs.readFile(templatePath, 'utf-8');
+ const template = handlebars.compile(templateSource);
 
-  const frontendUrl = process.env.FRONTEND_DOMAIN `${resetToken}`;
+   const html = template({
+    name: user.username,
+    link: `${process.env.FRONTEND_DOMAIN}/reset-password?token=${resetToken}`,
+  });
 
   try {
     await sendEmail({
       from: process.env.SMTP_FROM,
       to: email,
       subject: 'Reset password link',
-      html: `<p>Click this <a href="${frontendUrl}">link</a> to reset password</p>`,
+      html
     });
   } catch {
     throw createHttpError(
