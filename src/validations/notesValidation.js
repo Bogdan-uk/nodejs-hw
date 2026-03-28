@@ -49,3 +49,5 @@ export const updateNoteSchema = {
       .optional(),
   }).min(1),
 };
+// lfqgefguqfguqlfuqluflqvbqvljuvlugqgv2u12gv1
+// const Email = {name: User}
